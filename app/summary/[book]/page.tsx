@@ -5,7 +5,7 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import Link from 'next/link';
 
-async function getBookContent(book) {
+async function getBookContent(book: string) {
   const summariesDir = path.join(process.cwd(), 'summaries');
   const filePath = path.join(summariesDir, `${book}.md`);
 
@@ -18,7 +18,13 @@ async function getBookContent(book) {
   return processedContent.toString();
 }
 
-export default async function BookSummary({ params }) {
+interface BookSummaryProps {
+  params: {
+    book: string;
+  };
+}
+
+export default async function BookSummary({ params }: BookSummaryProps) {
   const { book } = params;
   const contentHtml = await getBookContent(book);
   const bookName = book.replace(/_/g, ' ');
@@ -32,7 +38,8 @@ export default async function BookSummary({ params }) {
         <div
           className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl note-text text-base leading-7"
           dangerouslySetInnerHTML={{ __html: contentHtml }}
-        />      </div>
+        />
+      </div>
     </div>
   );
 }
